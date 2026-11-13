@@ -1,0 +1,29 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { render } from 'astro:content';
+import { formatPostDate, type Post } from '../lib/posts';
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <article class="article-shell">
+    <a class="back-link" href="/posts/">返回文章列表</a>
+    <header class="article-header">
+      <p class="eyebrow">{formatPostDate(post.data.publishDate)}</p>
+      <h1>{post.data.title}</h1>
+      <p class="article-description">{post.data.description}</p>
+      <ul class="tag-list" aria-label="文章标签">
+        {post.data.tags.map((tag) => <li>{tag}</li>)}
+      </ul>
+    </header>
+    <div class="article-content">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

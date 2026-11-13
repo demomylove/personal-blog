@@ -1,0 +1,66 @@
+---
+import '../styles/global.css';
+
+type NavItem = {
+  href: string;
+  label: string;
+};
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = '一个记录项目、阅读与生活观察的个人博客。' } =
+  Astro.props;
+
+const navItems: NavItem[] = [
+  { href: '/', label: '首页' },
+  { href: '/posts/', label: '文章' },
+  { href: '/about/', label: '关于' },
+];
+
+const pathname = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} | Personal Blog</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav-shell" aria-label="主导航">
+        <a class="brand" href="/">Personal Blog</a>
+        <div class="nav-links">
+          {
+            navItems.map((item) => {
+              const isActive =
+                item.href === '/'
+                  ? pathname === '/'
+                  : pathname.startsWith(item.href);
+              return (
+                <a
+                  class:list={['nav-link', { 'is-active': isActive }]}
+                  href={item.href}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              );
+            })
+          }
+        </div>
+      </nav>
+    </header>
+    <main class="page-shell">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <p>用文字整理想法，用项目验证想法。</p>
+    </footer>
+  </body>
+</html>
