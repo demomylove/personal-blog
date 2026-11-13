@@ -9,11 +9,12 @@ interface Props {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description}>
   <article class="article-shell">
-    <a class="back-link" href="/posts/">返回文章列表</a>
+    <a class="back-link" href={`${base}/posts/`}>返回文章列表</a>
     <header class="article-header">
       <p class="eyebrow">{formatPostDate(post.data.publishDate)}</p>
       <h1>{post.data.title}</h1>

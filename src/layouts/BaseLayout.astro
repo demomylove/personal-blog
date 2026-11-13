@@ -14,10 +14,13 @@ interface Props {
 const { title, description = '一个记录项目、阅读与生活观察的个人博客。' } =
   Astro.props;
 
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const homeHref = `${base}/`;
+
 const navItems: NavItem[] = [
-  { href: '/', label: '首页' },
-  { href: '/posts/', label: '文章' },
-  { href: '/about/', label: '关于' },
+  { href: homeHref, label: '首页' },
+  { href: `${base}/posts/`, label: '文章' },
+  { href: `${base}/about/`, label: '关于' },
 ];
 
 const pathname = Astro.url.pathname;
@@ -34,13 +37,13 @@ const pathname = Astro.url.pathname;
   <body>
     <header class="site-header">
       <nav class="nav-shell" aria-label="主导航">
-        <a class="brand" href="/">Personal Blog</a>
+        <a class="brand" href={homeHref}>Personal Blog</a>
         <div class="nav-links">
           {
             navItems.map((item) => {
               const isActive =
-                item.href === '/'
-                  ? pathname === '/'
+                item.href === homeHref
+                  ? pathname === homeHref
                   : pathname.startsWith(item.href);
               return (
                 <a
