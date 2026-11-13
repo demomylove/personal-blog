@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { formatPostDate, getPostSlug, getPublishedPosts } from '../lib/posts';
+
+const posts = await getPublishedPosts();
+const latestPosts = posts.slice(0, 3);
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<BaseLayout title="首页">
+  <section class="hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">个人博客</p>
+      <h1>记录项目、阅读和正在形成的想法。</h1>
+      <p>
+        这里整理软件开发实践、学习笔记和生活观察。内容保持轻量、清楚，
+        方便回看，也方便从任意一篇文章开始阅读。
+      </p>
+      <div class="action-row">
+        <a class="button button-primary" href={`${base}/posts/`}>浏览文章</a>
+        <a class="button button-secondary" href={`${base}/about/`}>了解作者</a>
+      </div>
+    </div>
+    <aside class="latest-panel" aria-labelledby="latest-posts-heading">
+      <h2 id="latest-posts-heading">最新文章</h2>
+      <div class="latest-list">
+        {
+          latestPosts.map((post) => (
+            <a class="latest-item" href={`${base}/posts/${getPostSlug(post)}/`}>
+              <time datetime={post.data.publishDate.toISOString()}>
+                {formatPostDate(post.data.publishDate)}
+              </time>
+              <strong>{post.data.title}</strong>
+              <span>{post.data.description}</span>
+            </a>
+          ))
+        }
+      </div>
+    </aside>
+  </section>
+</BaseLayout>
